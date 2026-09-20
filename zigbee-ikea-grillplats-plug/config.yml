@@ -1,0 +1,5 @@
+name: 'IKEA GRILLPLATS Plug Power'
+packageKey: 'IKEA_GRILLPLATS_Plug_Power'
+description: 'IKEA GRILLPLATS Plug: switch, current, power and voltage'
+permissions:
+  zigbee: {}

@@ -1,0 +1,6 @@
+zigbeeManufacturer:
+  - id: "IKEA of Sweden/GRILLPLATS Plug"
+    deviceLabel: IKEA GRILLPLATS Plug
+    manufacturer: IKEA of Sweden
+    model: GRILLPLATS Plug
+    deviceProfileName: ikea-grillplats-plug
