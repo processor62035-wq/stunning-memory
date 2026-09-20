@@ -115,9 +115,6 @@ deviceConfig:
     - component: main
       capability: refresh
       version: 1
-    - component: main
-      capability: alarm
-      version: 1
   automation:
     conditions:
       - component: main
