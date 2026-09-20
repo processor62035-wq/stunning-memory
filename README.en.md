@@ -14,7 +14,8 @@ This repository provides the following features for an IKEA GRILLPLATS Plug pair
 - Current: `A`
 - Cumulative energy: `Wh`
 - Manual refresh
-- Immediate voltage alarm based on the normal-voltage average (±5% or ±10%)
+- Immediate voltage alarm based on the normal-voltage average (±5% or ±10%, default ±10%)
+- Automatic switch-off at ±15% for 15 seconds, or immediately at ±20%
 
 Verified on the SmartThings hub:
 
@@ -65,3 +66,7 @@ update it. A reading outside the selected range emits the standard `alarm` state
 immediately, without waiting for one minute. The alarm clears automatically when
 voltage returns to the normal range and can be used as a SmartThings automation
 condition for notifications.
+
+When `전압 이상 자동 차단` is enabled, the switch turns off after ±15% deviation
+continues for 15 seconds, or immediately at ±20%. The driver emits the alarm state
+once more immediately before either shutoff.
