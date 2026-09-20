@@ -4,6 +4,20 @@ IKEA GRILLPLATS Plug 지그비 엣지 드라이버
 
 [영어 문서 보기](README.en.md)
 
+## Matter 드라이버
+
+Matter over Thread로 연결한 장치에는 `matter-ikea-grillplats-plug` 전용 드라이버를 사용할 수 있습니다.
+
+- 전원 켜기·끄기
+- 소모 전력: `W`
+- 전압: `V`
+- 전류: `A`
+- 누적 에너지: `Wh`
+
+실제 허브 검증값: 전력 `146.3 W`, 전압 `227 V`, 전류 `0.663 A`, 에너지 `39 Wh`.
+
+지그비 드라이버가 아니라 Matter 장치를 새로 등록한 뒤, Matter 드라이버를 선택해야 합니다.
+
 ## 중요: 지그비 모드 활성화
 
 이 드라이버는 **IKEA GRILLPLATS Plug의 지그비 모드 전용**입니다.

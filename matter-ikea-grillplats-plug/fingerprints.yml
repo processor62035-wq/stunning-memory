@@ -1,0 +1,6 @@
+matterManufacturer:
+  - id: "4476/4096"
+    deviceLabel: IKEA GRILLPLATS Plug Matter
+    vendorId: 0x117C
+    productId: 0x1000
+    deviceProfileName: matter-ikea-grillplats-plug

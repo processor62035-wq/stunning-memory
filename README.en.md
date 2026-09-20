@@ -4,6 +4,20 @@ SmartThings Edge Zigbee driver for the IKEA GRILLPLATS Plug
 
 [View the Korean document](README.md)
 
+## Matter Driver
+
+For a device paired through Matter over Thread, use the dedicated `matter-ikea-grillplats-plug` driver.
+
+- On and off
+- Power: `W`
+- Voltage: `V`
+- Current: `A`
+- Cumulative energy: `Wh`
+
+Verified on the hub: power `146.3 W`, voltage `227 V`, current `0.663 A`, and energy `39 Wh`.
+
+This requires pairing the Matter device and selecting the Matter driver; it is separate from the Zigbee driver.
+
 ## Important: Enable Zigbee Mode
 
 This driver is **only for the Zigbee mode of the IKEA GRILLPLATS Plug**.

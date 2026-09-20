@@ -1,0 +1,5 @@
+name: 'IKEA GRILLPLATS Plug Matter Power'
+packageKey: 'IKEA_GRILLPLATS_Plug_Matter_Power'
+description: 'IKEA GRILLPLATS Plug Matter over Thread driver with power, voltage, and current'
+permissions:
+  matter: {}
