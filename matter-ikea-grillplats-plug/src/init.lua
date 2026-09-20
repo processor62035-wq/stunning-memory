@@ -14,6 +14,19 @@ local function emit_main(device, event)
   device.profile.components["main"]:emit_event(event)
 end
 
+local function emit_voltage_alarm(device)
+  local mode = device.preferences.voltageAlarmMode or "strobe"
+  if mode == "off" then
+    emit_main(device, capabilities.alarm.alarm.off())
+  elseif mode == "siren" then
+    emit_main(device, capabilities.alarm.alarm.siren())
+  elseif mode == "both" then
+    emit_main(device, capabilities.alarm.alarm.both())
+  else
+    emit_main(device, capabilities.alarm.alarm.strobe())
+  end
+end
+
 local function cancel_auto_off(device)
   local timer = device:get_field(AUTO_OFF_TIMER)
   if timer then
@@ -74,7 +87,7 @@ local function evaluate_voltage_alarm(device, voltage)
   local out_of_range = voltage < average * (1 - tolerance / 100) or voltage > average * (1 + tolerance / 100)
   local active = device:get_field("voltage_alarm_active") == true
   if out_of_range and not active then
-    emit_main(device, capabilities.alarm.alarm.siren())
+    emit_voltage_alarm(device)
     device:set_field("voltage_alarm_active", true, {persist = true})
   elseif not out_of_range and active then
     emit_main(device, capabilities.alarm.alarm.off())
@@ -148,6 +161,7 @@ local driver_template = {
     infoChanged = function(driver, device, event, args)
       if args.old_st_store.preferences.voltageAlarmEnabled ~= device.preferences.voltageAlarmEnabled or
         args.old_st_store.preferences.voltageAlarmTolerance ~= device.preferences.voltageAlarmTolerance or
+        args.old_st_store.preferences.voltageAlarmMode ~= device.preferences.voltageAlarmMode or
         args.old_st_store.preferences.voltageAutoOffEnabled ~= device.preferences.voltageAutoOffEnabled then
         cancel_auto_off(device)
         device:set_field("voltage_average", nil)

@@ -16,6 +16,7 @@ This repository provides the following features for an IKEA GRILLPLATS Plug pair
 - Manual refresh
 - Immediate voltage alarm based on the normal-voltage average (±5% or ±10%, default ±10%)
 - Automatic switch-off at ±15% for 15 seconds, or immediately at ±20%
+- Selectable alarm mode: off, strobe, siren and strobe+siren
 
 Verified on the SmartThings hub:
 
@@ -70,3 +71,6 @@ condition for notifications.
 When `전압 이상 자동 차단` is enabled, the switch turns off after ±15% deviation
 continues for 15 seconds, or immediately at ±20%. The driver emits the alarm state
 once more immediately before either shutoff.
+
+The alarm mode for a voltage deviation is configurable. Immediately before automatic
+shutoff, the driver uses the siren regardless of the selected deviation mode.
