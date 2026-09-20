@@ -30,3 +30,22 @@ preferences:
       "fixed_60": "60초, 고정"
       "manual": "사용안함 (수동전용)"
     default: "variable_5_10"
+- name: voltageMode
+  title: 전압값 방식
+  description: 센서 전압을 사용하거나 설정한 고정 전압을 사용합니다.
+  required: true
+  preferenceType: enumeration
+  definition:
+    options:
+      "auto": "센서 우선, 없으면 고정값"
+      "fixed": "고정값 사용"
+    default: "auto"
+- name: fixedVoltage
+  title: 고정 전압
+  description: 전압 센서가 없을 때 전류·전력 계산에 사용할 전압입니다.
+  required: true
+  preferenceType: number
+  definition:
+    minimum: 100
+    maximum: 300
+    default: 230

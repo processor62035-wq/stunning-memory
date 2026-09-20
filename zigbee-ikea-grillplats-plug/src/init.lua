@@ -6,6 +6,7 @@ local device_management = require "st.zigbee.device_management"
 
 local OnOff = clusters.OnOff
 local ElectricalMeasurement = clusters.ElectricalMeasurement
+local SimpleMetering = clusters.SimpleMetering
 
 local REPORT_MIN = 1
 local REPORT_DISABLED = 0xFFFF
@@ -33,6 +34,9 @@ local function read_measurements(device)
   device:send(ElectricalMeasurement.attributes.RMSVoltage:read(device))
   device:send(ElectricalMeasurement.attributes.RMSCurrent:read(device))
   device:send(ElectricalMeasurement.attributes.ActivePower:read(device))
+  device:send(SimpleMetering.attributes.InstantaneousDemand:read(device))
+  device:send(SimpleMetering.attributes.Multiplier:read(device))
+  device:send(SimpleMetering.attributes.Divisor:read(device))
 end
 
 local function scale(device, value, multiplier_key, divisor_key, default_divisor)
@@ -42,19 +46,62 @@ local function scale(device, value, multiplier_key, divisor_key, default_divisor
   return (value.value * multiplier) / divisor
 end
 
+local function configured_voltage(device)
+  return tonumber(device.preferences.fixedVoltage) or 230
+end
+
+local function effective_voltage(device)
+  if device.preferences.voltageMode == "fixed" then
+    return configured_voltage(device)
+  end
+  return device:get_field("last_voltage") or configured_voltage(device)
+end
+
+local function emit_fallbacks(device)
+  local voltage = effective_voltage(device)
+  if device.preferences.voltageMode == "fixed" or not device:get_field("voltage_seen") then
+    device:emit_event(capabilities.voltageMeasurement.voltage({value = voltage, unit = "V"}))
+  end
+
+  local power = device:get_field("last_power")
+  local current = device:get_field("last_current")
+  if power == nil and current ~= nil then
+    device:emit_event(capabilities.powerMeter.power({value = current * voltage, unit = "W"}))
+  elseif current == nil and power ~= nil and voltage > 0 then
+    device:emit_event(capabilities.currentMeasurement.current({value = power / voltage, unit = "A"}))
+  end
+end
+
 local function voltage_handler(driver, device, value)
   local voltage = scale(device, value, "voltage_multiplier", "voltage_divisor", 10)
+  device:set_field("voltage_seen", true)
+  device:set_field("last_voltage", voltage)
   device:emit_event(capabilities.voltageMeasurement.voltage({value = voltage, unit = "V"}))
+  emit_fallbacks(device)
 end
 
 local function current_handler(driver, device, value)
   local current = scale(device, value, "current_multiplier", "current_divisor", 1000)
+  device:set_field("current_seen", true)
+  device:set_field("last_current", current)
   device:emit_event(capabilities.currentMeasurement.current({value = current, unit = "A"}))
+  emit_fallbacks(device)
 end
 
 local function power_handler(driver, device, value)
   local power = scale(device, value, "power_multiplier", "power_divisor", 1)
+  device:set_field("electrical_power_seen", true)
+  device:set_field("last_power", power)
   device:emit_event(capabilities.powerMeter.power({value = power, unit = "W"}))
+  emit_fallbacks(device)
+end
+
+local function instantaneous_demand_handler(driver, device, value)
+  if device:get_field("electrical_power_seen") then return end
+  local power = scale(device, value, "meter_multiplier", "meter_divisor", 1)
+  device:set_field("last_power", power)
+  device:emit_event(capabilities.powerMeter.power({value = power, unit = "W"}))
+  emit_fallbacks(device)
 end
 
 local function save_multiplier(field, default)
@@ -80,6 +127,8 @@ local function configure_reporting(driver, device)
   device:send(ElectricalMeasurement.attributes.ACCurrentDivisor:read(device))
   device:send(ElectricalMeasurement.attributes.ACPowerMultiplier:read(device))
   device:send(ElectricalMeasurement.attributes.ACPowerDivisor:read(device))
+  device:send(SimpleMetering.attributes.Multiplier:read(device))
+  device:send(SimpleMetering.attributes.Divisor:read(device))
   read_measurements(device)
 end
 
@@ -120,10 +169,12 @@ local driver_template = {
       device:set_field("current_divisor", device:get_field("current_divisor") or 1000, {persist = true})
       device:set_field("power_multiplier", device:get_field("power_multiplier") or 1, {persist = true})
       device:set_field("power_divisor", device:get_field("power_divisor") or 1, {persist = true})
+      emit_fallbacks(device)
       schedule_polling(driver, device)
     end,
     infoChanged = function(driver, device)
       configure_reporting(driver, device)
+      emit_fallbacks(device)
       schedule_polling(driver, device)
     end,
     doConfigure = configure_reporting,
@@ -156,6 +207,11 @@ local driver_template = {
         [ElectricalMeasurement.attributes.ACCurrentDivisor.ID] = save_multiplier("current_divisor", 1000),
         [ElectricalMeasurement.attributes.ACPowerMultiplier.ID] = save_multiplier("power_multiplier", 1),
         [ElectricalMeasurement.attributes.ACPowerDivisor.ID] = save_multiplier("power_divisor", 1),
+      },
+      [SimpleMetering.ID] = {
+        [SimpleMetering.attributes.InstantaneousDemand.ID] = instantaneous_demand_handler,
+        [SimpleMetering.attributes.Multiplier.ID] = save_multiplier("meter_multiplier", 1),
+        [SimpleMetering.attributes.Divisor.ID] = save_multiplier("meter_divisor", 1),
       },
     },
   },
