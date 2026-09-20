@@ -33,6 +33,45 @@ Invitation link: <https://bestow-regional.api.smartthings.com/invite/Y7236AZwknM
 If the device still appears as `Generic Dimmer` or remains `NONFUNCTIONAL`,
 remove the existing device, pair it again in Zigbee mode, and select the new driver.
 
+## GRILLPLATS의 지그비 모드 켜기
+
+GRILLPLATS는 기본적으로 Matter over Thread 제품으로 판매되며, 지그비 모드는 공식 설치 화면에 표시되지 않는 숨은 호환 모드입니다.
+따라서 아래 순서는 제품 펌웨어에 따라 동작하지 않을 수 있습니다.
+
+1. 플러그를 전원에 연결합니다.
+2. 플러그의 전원 버튼을 약 10초 동안 길게 눌러 초기화합니다.
+3. 빨간 불이 깜박인 뒤 초기화가 끝날 때까지 기다립니다. 일부 제품은 빨간 불 뒤 흰 불이 켜집니다.
+4. 버튼을 빠르게 8번 누릅니다.
+5. SmartThings Station에서 새 지그비 장치 검색을 시작하고 `IKEA GRILLPLATS Plug Power`를 선택합니다.
+
+8번 입력만으로 검색되지 않으면 일부 펌웨어에서 보고된 보조 순서인 `4번 빠르게 누르기 → 8번 빠르게 누르기`를 시도합니다.
+버튼 입력 뒤에는 검색을 계속 유지하고, 기존 Matter 장치 등록이 남아 있으면 먼저 삭제합니다.
+
+이 모드는 IKEA의 일반 Matter 설치 절차가 아닌 비공식 호환 기능입니다.
+지그비 모드에서는 모델과 펌웨어에 따라 전류·전압·소모 전력 측정 클러스터가 제공되지 않을 수 있습니다.
+
+참고:
+
+- <https://www.zigbee2mqtt.io/devices/E2435.html>
+- <https://www.ikea.com/se/sv/p/grillplats-stickpropp-smart-60604238/>
+
+## How to Enable Zigbee Mode on GRILLPLATS
+
+GRILLPLATS is sold primarily as a Matter over Thread product. Zigbee mode is a hidden compatibility mode and is not shown in the normal official setup flow.
+The sequence may vary by firmware.
+
+1. Plug the device into a power outlet.
+2. Press and hold the plug's power button for about 10 seconds to factory-reset it.
+3. Wait until the red LED flashes and the reset finishes. Some units show a white LED after the red LED.
+4. Quickly press the button 8 times.
+5. Start Zigbee device discovery on the SmartThings Station and select `IKEA GRILLPLATS Plug Power`.
+
+If the device is not discovered after eight presses, try the alternate sequence reported for some firmware: `press 4 times quickly, then press 8 times quickly`.
+Keep discovery running after the button sequence and remove any previous Matter pairing first.
+
+This is an unofficial compatibility path rather than IKEA's normal Matter setup procedure.
+Depending on the model and firmware, Zigbee mode may not expose current, voltage, or power-measurement clusters.
+
 ## 목적
 
 IKEA `GRILLPLATS Plug`가 일반 조광기 드라이버로 잘못 인식되거나
