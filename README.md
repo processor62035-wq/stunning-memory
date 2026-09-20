@@ -63,6 +63,14 @@ IKEA `GRILLPLATS Plug`가 일반 조광기 드라이버로 잘못 인식되거�
 허브에 드라이버를 설치하는 것과 기존 장치가 새 드라이버를 사용하는 것은 별도 단계입니다.
 장치 전환 뒤에도 값이 비어 있으면 허브 로그에서 `ElectricalMeasurement` 보고 여부를 확인해야 합니다.
 
+## 배포 초대
+
+SmartThings 앱에서 아래 초대 링크를 열어 채널에 참여한 뒤 드라이버를 설치할 수 있습니다.
+
+<https://bestow-regional.api.smartthings.com/invite/Y7236AZwknMr>
+
+초대 코드: `Y7236AZwknMr`
+
 ## 폴더 구성
 
 ```text
