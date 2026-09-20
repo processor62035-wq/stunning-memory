@@ -1,5 +1,8 @@
 # stunning-memory
+
 IKEA GRILLPLATS Plug 지그비 엣지 드라이버
+
+[영어 문서 보기](README.en.md)
 
 ## 중요: 지그비 모드 활성화
 
@@ -16,22 +19,6 @@ IKEA GRILLPLATS Plug 지그비 엣지 드라이버
 
 장치가 계속 `Generic Dimmer`로 표시되거나 `NONFUNCTIONAL` 상태이면,
 기존 장치를 삭제한 뒤 지그비 모드로 다시 페어링하고 새 드라이버를 선택해야 할 수 있습니다.
-
-## Important: Enable Zigbee Mode
-
-This driver is **only for the Zigbee mode of the IKEA GRILLPLATS Plug**.
-It does not work with a Wi-Fi or cloud-connected device.
-
-1. Make sure the SmartThings Station hub is online.
-2. Open the invitation link below in the SmartThings app or on your phone.
-3. Accept the channel invitation and install `IKEA GRILLPLATS Plug Power` on the hub.
-4. Change the existing device driver to `IKEA GRILLPLATS Plug Power`.
-5. Check that switch state, current, power, and voltage are shown on the device screen.
-
-Invitation link: <https://bestow-regional.api.smartthings.com/invite/Y7236AZwknMr>
-
-If the device still appears as `Generic Dimmer` or remains `NONFUNCTIONAL`,
-remove the existing device, pair it again in Zigbee mode, and select the new driver.
 
 ## GRILLPLATS의 지그비 모드 켜기
 
@@ -54,23 +41,6 @@ GRILLPLATS는 기본적으로 Matter over Thread 제품으로 판매되며, 지�
 
 - <https://www.zigbee2mqtt.io/devices/E2435.html>
 - <https://www.ikea.com/se/sv/p/grillplats-stickpropp-smart-60604238/>
-
-## How to Enable Zigbee Mode on GRILLPLATS
-
-GRILLPLATS is sold primarily as a Matter over Thread product. Zigbee mode is a hidden compatibility mode and is not shown in the normal official setup flow.
-The sequence may vary by firmware.
-
-1. Plug the device into a power outlet.
-2. Press and hold the plug's power button for about 10 seconds to factory-reset it.
-3. Wait until the red LED flashes and the reset finishes. Some units show a white LED after the red LED.
-4. Quickly press the button 8 times.
-5. Start Zigbee device discovery on the SmartThings Station and select `IKEA GRILLPLATS Plug Power`.
-
-If the device is not discovered after eight presses, try the alternate sequence reported for some firmware: `press 4 times quickly, then press 8 times quickly`.
-Keep discovery running after the button sequence and remove any previous Matter pairing first.
-
-This is an unofficial compatibility path rather than IKEA's normal Matter setup procedure.
-Depending on the model and firmware, Zigbee mode may not expose current, voltage, or power-measurement clusters.
 
 ## 목적
 
