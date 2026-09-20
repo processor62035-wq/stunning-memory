@@ -45,7 +45,7 @@ deviceConfig:
         version: 1
         group: main
         values:
-          - label: " | {{current.value}} {{current.unit}}"
+          - label: " | {{current.value}} A"
         composite: true
     actions:
       - component: main
