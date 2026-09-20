@@ -14,6 +14,7 @@ This repository provides the following features for an IKEA GRILLPLATS Plug pair
 - Current: `A`
 - Cumulative energy: `Wh`
 - Manual refresh
+- Immediate voltage alarm based on the normal-voltage average (±5% or ±10%)
 
 Verified on the SmartThings hub:
 
@@ -55,3 +56,12 @@ Electrical measurement endpoint: 2
 
 Voltage, current, and power are read from the Matter `ElectricalPowerMeasurement` cluster.
 Cumulative energy is read from the `ElectricalEnergyMeasurement` cluster.
+
+## Immediate Voltage Alarm
+
+The device settings provide ±5% and ±10% thresholds relative to the normal-voltage
+average. The first normal reading establishes the baseline and only normal readings
+update it. A reading outside the selected range emits the standard `alarm` state
+immediately, without waiting for one minute. The alarm clears automatically when
+voltage returns to the normal range and can be used as a SmartThings automation
+condition for notifications.

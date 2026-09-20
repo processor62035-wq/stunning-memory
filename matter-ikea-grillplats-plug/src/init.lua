@@ -13,6 +13,35 @@ local function emit_main(device, event)
   device.profile.components["main"]:emit_event(event)
 end
 
+local function evaluate_voltage_alarm(device, voltage)
+  if device.preferences.voltageAlarmEnabled == false then
+    if device:get_field("voltage_alarm_active") then
+      emit_main(device, capabilities.alarm.alarm.off())
+      device:set_field("voltage_alarm_active", false)
+    end
+    device:set_field("voltage_average", nil)
+    return
+  end
+  local average = device:get_field("voltage_average")
+  if average == nil or average <= 0 then
+    device:set_field("voltage_average", voltage, {persist = true})
+    return
+  end
+  local tolerance = tonumber(device.preferences.voltageAlarmTolerance) or 5
+  local out_of_range = voltage < average * (1 - tolerance / 100) or voltage > average * (1 + tolerance / 100)
+  local active = device:get_field("voltage_alarm_active") == true
+  if out_of_range and not active then
+    emit_main(device, capabilities.alarm.alarm.siren())
+    device:set_field("voltage_alarm_active", true, {persist = true})
+  elseif not out_of_range and active then
+    emit_main(device, capabilities.alarm.alarm.off())
+    device:set_field("voltage_alarm_active", false, {persist = true})
+  end
+  if not out_of_range then
+    device:set_field("voltage_average", average * 0.9 + voltage * 0.1, {persist = true})
+  end
+end
+
 local function on_off_handler(driver, device, ib)
   emit_main(device, ib.data.value and capabilities.switch.switch.on() or capabilities.switch.switch.off())
 end
@@ -25,7 +54,9 @@ end
 
 local function voltage_handler(driver, device, ib)
   if ib.data.value ~= nil then
-    emit_main(device, capabilities.voltageMeasurement.voltage({value = ib.data.value / 1000, unit = "V"}))
+    local voltage = ib.data.value / 1000
+    emit_main(device, capabilities.voltageMeasurement.voltage({value = voltage, unit = "V"}))
+    evaluate_voltage_alarm(device, voltage)
   end
 end
 
@@ -58,6 +89,7 @@ local driver_template = {
     capabilities.powerConsumptionReport,
     capabilities.voltageMeasurement,
     capabilities.currentMeasurement,
+    capabilities.alarm,
     capabilities.refresh,
   },
   lifecycle_handlers = {
@@ -114,6 +146,16 @@ local driver_template = {
     [capabilities.refresh.ID] = {
       [capabilities.refresh.commands.refresh.NAME] = function(driver, device)
         read_all(device)
+      end,
+    },
+    [capabilities.alarm.ID] = {
+      [capabilities.alarm.commands.off.NAME] = function(driver, device)
+        emit_main(device, capabilities.alarm.alarm.off())
+        device:set_field("voltage_alarm_active", false, {persist = true})
+      end,
+      [capabilities.alarm.commands.siren.NAME] = function(driver, device)
+        emit_main(device, capabilities.alarm.alarm.siren())
+        device:set_field("voltage_alarm_active", true, {persist = true})
       end,
     },
   },
