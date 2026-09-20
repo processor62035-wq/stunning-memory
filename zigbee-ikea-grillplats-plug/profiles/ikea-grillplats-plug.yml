@@ -14,3 +14,19 @@ components:
     version: 1
   categories:
   - name: SmartPlug
+preferences:
+- name: pollMode
+  title: 측정값 갱신 방식
+  description: 전류·소모 전력·전압의 자동 갱신 방식을 선택합니다.
+  required: true
+  preferenceType: enumeration
+  definition:
+    options:
+      "variable_5_10": "가변 (5~10초 가변)"
+      "variable_5_30": "가변 (5~30초 가변)"
+      "fixed_5": "5초, 고정"
+      "fixed_10": "10초, 고정"
+      "fixed_30": "30초, 고정"
+      "fixed_60": "60초, 고정"
+      "manual": "사용안함 (수동전용)"
+    default: "variable_5_10"
