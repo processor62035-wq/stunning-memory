@@ -1,6 +1,38 @@
 # stunning-memory
 IKEA GRILLPLATS Plug 지그비 엣지 드라이버
 
+## 중요: 지그비 모드 활성화
+
+이 드라이버는 **IKEA GRILLPLATS Plug의 지그비 모드 전용**입니다.
+와이파이 모드나 클라우드 방식으로 연결된 장치에는 사용할 수 없습니다.
+
+1. SmartThings Station 허브가 온라인인지 확인합니다.
+2. 아래 초대 링크를 스마트싱스 앱 또는 휴대폰 브라우저에서 엽니다.
+3. 채널 참여를 승인하고 `IKEA GRILLPLATS Plug Power` 드라이버를 허브에 설치합니다.
+4. 기존 장치의 드라이버를 `IKEA GRILLPLATS Plug Power`로 전환합니다.
+5. 장치 화면에서 전원, 전류, 소모 전력, 전압 값이 표시되는지 확인합니다.
+
+초대 링크: <https://bestow-regional.api.smartthings.com/invite/Y7236AZwknMr>
+
+장치가 계속 `Generic Dimmer`로 표시되거나 `NONFUNCTIONAL` 상태이면,
+기존 장치를 삭제한 뒤 지그비 모드로 다시 페어링하고 새 드라이버를 선택해야 할 수 있습니다.
+
+## Important: Enable Zigbee Mode
+
+This driver is **only for the Zigbee mode of the IKEA GRILLPLATS Plug**.
+It does not work with a Wi-Fi or cloud-connected device.
+
+1. Make sure the SmartThings Station hub is online.
+2. Open the invitation link below in the SmartThings app or on your phone.
+3. Accept the channel invitation and install `IKEA GRILLPLATS Plug Power` on the hub.
+4. Change the existing device driver to `IKEA GRILLPLATS Plug Power`.
+5. Check that switch state, current, power, and voltage are shown on the device screen.
+
+Invitation link: <https://bestow-regional.api.smartthings.com/invite/Y7236AZwknMr>
+
+If the device still appears as `Generic Dimmer` or remains `NONFUNCTIONAL`,
+remove the existing device, pair it again in Zigbee mode, and select the new driver.
+
 ## 목적
 
 IKEA `GRILLPLATS Plug`가 일반 조광기 드라이버로 잘못 인식되거나
